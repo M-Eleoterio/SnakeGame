@@ -1,3 +1,4 @@
+const fs = require("fs")
 //board
 
 var blockSize = 25;
@@ -38,7 +39,16 @@ var junkFoodY;
 
 function update() {
   if (gameOver) {
-    return;
+    let ObjData = {
+      "usuário": "admin",
+      "pontos": points
+    }
+    let JSONData = JSON.stringify(ObjData)
+    fs.writeFileSync('data.json', JSONData, 'utf-8', (err) => {
+      if (err) throw err;
+      console.log('Data added to file');
+    });
+
   }
 
   //board

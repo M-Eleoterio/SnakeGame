@@ -36,26 +36,54 @@ window.onload = () => {
     });
   });
   //FINALMENTE a função que carrega as páginas
-  function loadPage($path) {
-    // denovo se o caminho for vazio, só retorna pra pagina principal
-    if ($path == "") return;
-
-    const container = document.querySelector("#container");
-    //realiza uma request para o site
-    const req = new XMLHttpRequest();
-    //essa request é um GET da variavel $path (previamente enviada por outros function calls). Ele vai na pasta pages e busca pelo arquivo que contenha o nome da variavel + .html no final
-    req.open("GET", "pages/" + $path + ".html");
-    //retorna o que recebeu
-    req.send();
-    //se, quando carregar, o resultado for SUCESSO (status code 200), o innerhtml do container principal da pagina muda pra resposta recebida do request, que no caso é o conteudo da pagina
-    req.onload = () => {
-      if (req.status == 200) {
-        container.innerHTML = req.responseText;
-        document.title = $path;
-        const script = document.createElement("script");
-        script.src = "pages/scripts/" + $path + ".js";
-        document.head.appendChild(script);
-      }
-    };
-  }
+  
 };
+
+function loadPage($path) {
+  // denovo se o caminho for vazio, só retorna pra pagina principal
+  if ($path == "") return;
+
+  const container = document.querySelector("#container");
+  //realiza uma request para o site
+  const req = new XMLHttpRequest();
+  //essa request é um GET da variavel $path (previamente enviada por outros function calls). Ele vai na pasta pages e busca pelo arquivo que contenha o nome da variavel + .html no final
+  req.open("GET", "pages/" + $path + ".html");
+  //retorna o que recebeu
+  req.send();
+  //se, quando carregar, o resultado for SUCESSO (status code 200), o innerhtml do container principal da pagina muda pra resposta recebida do request, que no caso é o conteudo da pagina
+  req.onload = () => {
+    if (req.status == 200) {
+      container.innerHTML = req.responseText;
+      document.title = $path;
+      
+      const script = document.createElement("script");
+      script.src = "pages/scripts/" + $path + ".js";
+      script.type = "module"
+      document.head.appendChild(script);
+
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "pages/styles/" + $path + ".css";
+      document.head.appendChild(style);
+    }
+  };
+}
+
+function login () {
+  let user = document.querySelector("#login-user").value
+  let pass = document.querySelector("#login-pass").value
+  const loginBox = document.querySelector(".login-container")
+  let loged;
+
+  if (user === "admin" && pass === "admin") {
+      loged = "Login encontrado! Redirecionando..."
+      loginBox.append(loged)
+      setTimeout(loadPage("game"), 5000)
+    } else {
+      loged = "Login NÃO encontrado, verifique suas credenciais."
+      loginBox.append(loged)
+      return
+  }
+
+}
+
