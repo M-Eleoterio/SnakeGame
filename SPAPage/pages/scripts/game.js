@@ -1,4 +1,3 @@
-const fs = require("fs")
 //board
 
 var blockSize = 25;
@@ -39,7 +38,7 @@ var junkFoodY;
 
 function update() {
   if (gameOver) {
-    let ObjData = {
+    /* let ObjData = {
       "usuário": "admin",
       "pontos": points
     }
@@ -47,7 +46,16 @@ function update() {
     fs.writeFileSync('data.json', JSONData, 'utf-8', (err) => {
       if (err) throw err;
       console.log('Data added to file');
-    });
+    }); */
+    snakeSpeedX = 0
+    snakeSpeedY = 0
+    placeFood()
+    placeJunkFood()
+    snakeX = blockSize * 5;
+    snakeY = blockSize * 5;
+    snakeBody = []
+    points = 0
+    gameOver = false
 
   }
 
@@ -75,6 +83,7 @@ function update() {
   }
   if (snakeX == junkFoodX && snakeY == junkFoodY) {
     snakeBody.push([foodX, foodY]);
+    points -= 10
     placeJunkFood();
   }
   

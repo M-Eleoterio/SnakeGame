@@ -58,7 +58,6 @@ function loadPage($path) {
       
       const script = document.createElement("script");
       script.src = "pages/scripts/" + $path + ".js";
-      script.type = "module"
       document.head.appendChild(script);
 
       const style = document.createElement("link");
@@ -70,20 +69,34 @@ function loadPage($path) {
 }
 
 function login () {
-  let user = document.querySelector("#login-user").value
-  let pass = document.querySelector("#login-pass").value
+  const loginField = document.querySelector("#login-text")
+  let user = document.querySelector("#login-user").value.trim()
+  let pass = document.querySelector("#login-pass").value.trim()
   const loginBox = document.querySelector(".login-container")
   let loged;
 
-  if (user === "admin" && pass === "admin") {
-      loged = "Login encontrado! Redirecionando..."
-      loginBox.append(loged)
-      setTimeout(loadPage("game"), 5000)
-    } else {
-      loged = "Login NÃO encontrado, verifique suas credenciais."
-      loginBox.append(loged)
-      return
+  if (user == "" || pass == "") {
+    loged = `Por favor, preencha todos os campos.`
+    loginField.style.backgroundColor = "red"
+    loginField.innerHTML = loged
+    return
   }
 
+  if (user === "admin" && pass === "admin") {
+    loged = `Login encontrado! Redirecionando...`
+    loginField.style.backgroundColor = "green"
+    loginField.innerHTML = loged
+  } else {
+    loged = `Login NÃO encontrado, verifique suas credenciais.`
+    loginField.style.backgroundColor = "red"
+    loginField.innerHTML = loged
+    return
+  }
+
+  setTimeout(() => {
+    loadPage("game")
+  }, 3000)
+  return
+  
 }
 
