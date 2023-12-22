@@ -1,3 +1,5 @@
+import game from "./pages/scripts/game.js";
+
 //quando a tela toda carregar, faça...
 window.onload = () => {
   // pegando o caminho da URL e separando por / (meusite.com/*caminho1/subcaminho1*)
@@ -55,19 +57,18 @@ function loadPage($path) {
       container.innerHTML = req.responseText;
       document.title = $path;
 
-      if (!document.querySelector(`${$path}-script`)) {
-        const script = document.createElement("script");
-        script.src = "pages/scripts/" + $path + ".js";
-        script.id = `${$path}-script`
-        document.head.appendChild(script);
+      document.querySelectorAll(".script").forEach((script) => {
+        script.remove();
+      });
+      document.querySelectorAll(".style").forEach((style) => {
+        style.remove();
+      });
+
+      switch($path) {
+        case "game":
+          game()
       }
-      if (!document.querySelector(`${$path}-style`)) {
-        const style = document.createElement("link");
-        style.rel = "stylesheet";
-        style.id = `${$path}-style`
-        style.href = "pages/styles/" + $path + ".css";
-        document.head.appendChild(style);
-      }
+
     }
   };
 }
@@ -89,7 +90,6 @@ function login() {
     loged = `Login encontrado! Redirecionando...`;
     loginField.style.backgroundColor = "green";
     loginField.innerHTML = loged;
-    
   } else {
     loged = `Login NÃO encontrado, verifique suas credenciais.`;
     loginField.style.backgroundColor = "red";
