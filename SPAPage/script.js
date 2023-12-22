@@ -1,4 +1,5 @@
 import game from "./pages/scripts/game.js";
+import ranking from "./pages/scripts/ranking.js";
 
 //quando a tela toda carregar, faça...
 window.onload = () => {
@@ -64,19 +65,24 @@ function loadPage($path) {
         style.remove();
       });
 
-      switch($path) {
+      switch ($path) {
         case "game":
-          game()
+          game();
+          break;
+        case "ranking":
+          ranking(JSON.parse(localStorage.getItem("userData")));
+          break;
       }
-
     }
   };
 }
-function login() {
-  const loginField = document.querySelector("#login-text");
+
+setTimeout(() => {
+  const lbtn = document.querySelector("#lbtn")
+  lbtn.addEventListener("click", () => {
+    const loginField = document.querySelector("#login-text");
   let user = document.querySelector("#login-user").value.trim();
   let pass = document.querySelector("#login-pass").value.trim();
-  const loginBox = document.querySelector(".login-container");
   let loged;
 
   if (user == "" || pass == "") {
@@ -100,5 +106,5 @@ function login() {
   setTimeout(() => {
     loadPage("game");
   }, 3000);
-  return;
-}
+  })
+}, 2000);
