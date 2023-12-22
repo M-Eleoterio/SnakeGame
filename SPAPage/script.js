@@ -36,7 +36,6 @@ window.onload = () => {
     });
   });
   //FINALMENTE a função que carrega as páginas
-  
 };
 
 function loadPage($path) {
@@ -55,48 +54,51 @@ function loadPage($path) {
     if (req.status == 200) {
       container.innerHTML = req.responseText;
       document.title = $path;
-      
-      const script = document.createElement("script");
-      script.src = "pages/scripts/" + $path + ".js";
-      document.head.appendChild(script);
 
-      const style = document.createElement("link");
-      style.rel = "stylesheet";
-      style.href = "pages/styles/" + $path + ".css";
-      document.head.appendChild(style);
+      if (!document.querySelector(`${$path}-script`)) {
+        const script = document.createElement("script");
+        script.src = "pages/scripts/" + $path + ".js";
+        script.id = `${$path}-script`
+        document.head.appendChild(script);
+      }
+      if (!document.querySelector(`${$path}-style`)) {
+        const style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.id = `${$path}-style`
+        style.href = "pages/styles/" + $path + ".css";
+        document.head.appendChild(style);
+      }
     }
   };
 }
-
-function login () {
-  const loginField = document.querySelector("#login-text")
-  let user = document.querySelector("#login-user").value.trim()
-  let pass = document.querySelector("#login-pass").value.trim()
-  const loginBox = document.querySelector(".login-container")
+function login() {
+  const loginField = document.querySelector("#login-text");
+  let user = document.querySelector("#login-user").value.trim();
+  let pass = document.querySelector("#login-pass").value.trim();
+  const loginBox = document.querySelector(".login-container");
   let loged;
 
   if (user == "" || pass == "") {
-    loged = `Por favor, preencha todos os campos.`
-    loginField.style.backgroundColor = "red"
-    loginField.innerHTML = loged
-    return
+    loged = `Por favor, preencha todos os campos.`;
+    loginField.style.backgroundColor = "red";
+    loginField.innerHTML = loged;
+    return;
   }
 
   if (user === "admin" && pass === "admin") {
-    loged = `Login encontrado! Redirecionando...`
-    loginField.style.backgroundColor = "green"
-    loginField.innerHTML = loged
+    loged = `Login encontrado! Redirecionando...`;
+    loginField.style.backgroundColor = "green";
+    loginField.innerHTML = loged;
+    
   } else {
-    loged = `Login NÃO encontrado, verifique suas credenciais.`
-    loginField.style.backgroundColor = "red"
-    loginField.innerHTML = loged
-    return
+    loged = `Login NÃO encontrado, verifique suas credenciais.`;
+    loginField.style.backgroundColor = "red";
+    loginField.innerHTML = loged;
+    return;
   }
 
   setTimeout(() => {
-    loadPage("game")
-  }, 3000)
-  return
-  
+    loadPage("game");
+  }, 3000);
+  return;
 }
-

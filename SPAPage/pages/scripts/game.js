@@ -21,42 +21,44 @@ var snakeSpeedY = 0;
 //food
 var foodX;
 var foodY;
+var FoodEaten = 0;
 
 //junk food
 var junkFoodX;
 var junkFoodY;
+var junkFoodEaten = 0;
 
-  board = document.getElementById("board");
-  board.height = rows * blockSize;
-  board.width = cols * blockSize;
-  context = board.getContext("2d");
+board = document.getElementById("board");
+board.height = rows * blockSize;
+board.width = cols * blockSize;
+context = board.getContext("2d");
 
-  placeFood();
-  placeJunkFood();
-  document.addEventListener("keyup", changeDirection);
-  setInterval(update, 100);
+placeFood();
+placeJunkFood();
+document.addEventListener("keyup", changeDirection);
+setInterval(update, 100);
 
 function update() {
   if (gameOver) {
-    /* let ObjData = {
-      "usuário": "admin",
-      "pontos": points
-    }
-    let JSONData = JSON.stringify(ObjData)
-    fs.writeFileSync('data.json', JSONData, 'utf-8', (err) => {
-      if (err) throw err;
-      console.log('Data added to file');
-    }); */
-    snakeSpeedX = 0
-    snakeSpeedY = 0
-    placeFood()
-    placeJunkFood()
+    let data = {
+      usuário: "admin",
+      pontos: points,
+      comida_saudavel: FoodEaten,
+      comida_nao_saudavel: junkFoodEaten,
+    };
+    localStorage.setItem("userData", JSON.stringify(data));
+
+    snakeSpeedX = 0;
+    snakeSpeedY = 0;
+    placeFood();
+    placeJunkFood();
     snakeX = blockSize * 5;
     snakeY = blockSize * 5;
-    snakeBody = []
-    points = 0
-    gameOver = false
-
+    snakeBody = [];
+    points = 0;
+    junkFoodEaten = 0;
+    FoodEaten = 0;
+    gameOver = false;
   }
 
   //board
@@ -79,14 +81,15 @@ function update() {
 
   if (snakeX == foodX && snakeY == foodY) {
     points += 30;
+    FoodEaten++;
     placeFood();
   }
   if (snakeX == junkFoodX && snakeY == junkFoodY) {
     snakeBody.push([foodX, foodY]);
-    points -= 10
+    points -= 10;
+    junkFoodEaten++;
     placeJunkFood();
   }
-  
 
   for (let i = snakeBody.length - 1; i > 0; i--) {
     snakeBody[i] = snakeBody[i - 1];
@@ -96,7 +99,9 @@ function update() {
   }
 
   //points
-  document.getElementById("points").innerHTML = `Points: ${points}`;
+  document.getElementById("points").innerHTML = `Pontos: ${points}`;
+  document.querySelector("#junk-food").innerHTML = `Comida Não Saudável: ${junkFoodEaten}`
+  document.querySelector("#food").innerHTML = `Comida Saudável: ${FoodEaten}`
 
   //game over
   if (
@@ -141,7 +146,7 @@ function placeFood() {
   foodY = Math.floor(Math.random() * rows) * blockSize;
 
   if (foodX == junkFoodX && foodY == junkFoodY) {
-    placeFood()
+    placeFood();
   }
 }
 
@@ -149,6 +154,6 @@ function placeJunkFood() {
   junkFoodX = Math.floor(Math.random() * cols) * blockSize;
   junkFoodY = Math.floor(Math.random() * rows) * blockSize;
   if (junkFoodX == foodX && junkFoodY == foodY) {
-    placeJunkFood()
+    placeJunkFood();
   }
 }
